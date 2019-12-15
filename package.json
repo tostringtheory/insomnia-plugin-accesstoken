@@ -13,5 +13,10 @@
     "name": "accesstoken",
     "description": "Access the access token of other requests"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "keywords": [
+    "insomnia",
+    "plugin",
+    "oauth"
+  ]
 }
