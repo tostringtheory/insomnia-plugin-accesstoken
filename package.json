@@ -1,0 +1,12 @@
+{
+  "name": "insomnia-plugin-accesstoken",
+  "version": "1.0.0",
+  "author": "tostringtheory",
+  "license": "MIT",
+  "main": "index.js",
+  "insomnia": {
+    "name": "accesstoken",
+    "description": "Access the access token of other requests"
+  },
+  "dependencies": {}
+}
