@@ -22,13 +22,12 @@ module.exports = {
     }
 
     const authenticationRequest = await context.util.models.request.getById(oauthRequestId);
-    const prefix = ((authenticationRequest || {}).authentication || {}).tokenPrefix;
 
     const token = await context.util.models.oAuth2Token.getByRequestId(authenticationRequest._id);
     const accessToken = (token || {}).accessToken || '';
 
     if (context.renderPurpose == null) {
-      return `${prefix} ${accessToken || "<access-token-pending>"}`.trim();
+      return (accessToken || "<access-token-pending>").trim();
     }
 
     if (!accessToken) {
@@ -42,6 +41,6 @@ module.exports = {
       return '';
     }
 
-    return `${prefix} ${accessToken}`.trim();
+    return accessToken.trim();
   }
 };
