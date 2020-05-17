@@ -22,7 +22,7 @@ module.exports = {
     }
 
     const authenticationRequest = await context.util.models.request.getById(oauthRequestId);
-    const prefix = ((authenticationRequest || {}).authentication || {}).tokenPrefix;
+    const prefix = ((authenticationRequest || {}).authentication || {}).tokenPrefix || '';
 
     const token = await context.util.models.oAuth2Token.getByRequestId(authenticationRequest._id);
     const accessToken = (token || {}).accessToken || '';
