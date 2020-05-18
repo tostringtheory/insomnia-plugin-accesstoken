@@ -7,10 +7,33 @@ module.exports = {
       displayName: 'Request',
       type: 'model',
       model: 'Request',
-    }
+    },
+    {
+      displayName: 'Disable Auto Prefix',
+      type: 'boolean',
+      help: 'If this is disabled, your token will lack the prefix as specified on the source request.',
+      defaultValue: false,
+    },
+    {
+      displayName: 'Disable Expired Token Check',
+      type: 'boolean',
+      help: 'If this is disabled, you will not receive a notice when the token expires.',
+      defaultValue: false,
+    },
+    {
+      displayName: 'Disable Missing Token Check',
+      type: 'boolean',
+      help: 'If this is disabled, you will not receive a notice when the token is missing.',
+      defaultValue: false,
+    },
   ],
 
-  async run(context, oauthRequestId) {
+  async run(context,
+    oauthRequestId,
+    disableAutoPrefix,
+    disableExpiredTokenCheck,
+    disableMissingTokenCheck
+  ) {
     const { meta } = context;
 
     if (!meta.requestId || !meta.workspaceId) {
@@ -22,7 +45,7 @@ module.exports = {
     }
 
     const authenticationRequest = await context.util.models.request.getById(oauthRequestId);
-    const prefix = ((authenticationRequest || {}).authentication || {}).tokenPrefix || '';
+    const prefix = disableAutoPrefix ? '' : ((authenticationRequest || {}).authentication || {}).tokenPrefix || '';
 
     const token = await context.util.models.oAuth2Token.getByRequestId(authenticationRequest._id);
     const accessToken = (token || {}).accessToken || '';
@@ -32,12 +55,14 @@ module.exports = {
     }
 
     if (!accessToken) {
-      await context.app.alert("Access Token", "The access token is missing");
+      if (!disableMissingTokenCheck)
+        await context.app.alert("Access Token", "The access token is missing");
 
       return '';
     }
     else if (token.expiresAt < new Date()) {
-      await context.app.alert("Access Token", "The access token has expired");
+      if (!disableExpiredTokenCheck)
+        await context.app.alert("Access Token", "The access token has expired");
 
       return '';
     }

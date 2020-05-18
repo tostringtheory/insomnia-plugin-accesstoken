@@ -1,6 +1,6 @@
 {
   "name": "insomnia-plugin-accesstoken",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "tostringtheory",
   "description": "Adds a template tag for use in Insomnia, to access a request's access token",
   "license": "MIT",
